@@ -1,0 +1,57 @@
+services:
+    backend:
+        build:
+          context: ./Backend_API/simpleapi
+          dockerfile: Dockerfile
+        container_name: my-api-container
+        networks:
+          - app-network
+        depends_on:
+          - database
+        ports:
+          - "8081:8080"
+
+    database:
+      build:
+        context: ./Database
+        dockerfile: Dockerfile
+      container_name: my-postgres-container
+      networks:
+        - app-network
+      environment:
+        POSTGRES_USER: usr
+        POSTGRES_PASSWORD: pwd
+        POSTGRES_DB: db
+      volumes:
+        - db_data:/var/lib/postgresql/data
+        
+    adminer:
+        
+      image: adminer
+      container_name: adminer
+      networks:
+        - app-network
+      ports:
+        - "8090:8080"
+      depends_on:
+        - database
+
+    httpd:
+      build :
+        context: ./HTTPD
+        dockerfile: Dockerfile
+      container_name: my-httpd-container
+      networks:
+        - app-network
+      ports:
+        - "8080:80"
+      depends_on:
+        - backend
+        - database
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
