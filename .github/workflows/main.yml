@@ -24,11 +24,12 @@ jobs:
         working-directory: TP/TP2/tp-devops-correction-docker/simple-api
 
       - name: SonarCloud Scan
-        run: mvn -B verify sonar:sonar \
-          -Dsonar.projectKey=akli-melissa\
-          -Dsonar.organization=akli-melissa \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=akli-melissa \
+            -Dsonar.organization=akli-melissa \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         working-directory: TP/TP2/tp-devops-correction-docker/simple-api
 
   # JOB 2 : Livraison continue - build & push Docker images
