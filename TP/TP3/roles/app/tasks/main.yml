@@ -10,6 +10,9 @@
   docker_container:
     name: simple-api
     image: mellou/tp-devops-simple-api:latest
+    pull: true
+    recreate: true
+    force_kill: true
     state: started
     restart_policy: always
     env_file: /home/admin/app.env
