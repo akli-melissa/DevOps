@@ -6,6 +6,8 @@
     recreate: true
     force_kill: true
     state: started
+    ports:
+      - "8080:8080"
     restart_policy: always
     env:
       DATABASE_HOST: "{{ app_db_host }}"
