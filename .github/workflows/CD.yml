@@ -41,4 +41,9 @@ jobs:
           context: TP/TP2/tp-devops-correction-docker/database
           tags: ${{ secrets.DOCKER_USERNAME }}/tp-devops-database:latest
           push: true
-  
+      - name: Build and push front
+        uses: docker/build-push-action@v6
+        with:
+          context: TP/TP2/tp-devops-correction-docker/front
+          tags: ${{ secrets.DOCKER_USERNAME }}/tp-devops-front:latest
+          push: true

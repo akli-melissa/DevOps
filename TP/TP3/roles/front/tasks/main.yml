@@ -1,0 +1,7 @@
+- name: Run front container
+  docker_container:
+    name: front
+    image: mellou/tp-devops-front:latest
+    restart_policy: always
+    networks:
+      - name: my-network
