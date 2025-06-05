@@ -1,4 +1,4 @@
-db_user: usr
-db_password: pwd
-app_db_host: database
-app_db_password: pwd
+db_user: "{{ lookup('env', 'DB_USER') }}"
+db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+app_db_host: "{{ lookup('env', 'APP_DB_HOST') }}"
+app_db_password: "{{ lookup('env', 'APP_DB_PASSWORD') }}"
