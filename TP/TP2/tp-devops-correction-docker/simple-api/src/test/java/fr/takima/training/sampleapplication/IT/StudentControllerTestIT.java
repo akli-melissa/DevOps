@@ -26,7 +26,7 @@ class StudentControllerTestIT {
         mockMvc.perform(get("/students/6"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", equalTo(6)))
-                .andExpect(jsonPath("firstname", equalTo("Melissa")))
+                .andExpect(jsonPath("firstname", equalTo("Jeanne")))
                 .andExpect(jsonPath("lastname", equalTo("Ausecours")))
                 .andExpect(jsonPath("department.id", equalTo(4)))
                 .andExpect(jsonPath("department.name", equalTo("GC")));
