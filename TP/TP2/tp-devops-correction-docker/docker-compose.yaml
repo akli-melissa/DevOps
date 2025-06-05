@@ -16,6 +16,12 @@ services:
       - DATABASE_PASSWORD=pwd
     networks:
       - my-network
+  
+  front:
+    build: "front"
+    networks:
+    - my-network
+
 
   httpd:
     build: "http-server"
