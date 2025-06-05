@@ -1,0 +1,17 @@
+
+- name: Générer le fichier .env pour simple-api
+  template:
+    src: .env.j2
+    dest: /home/admin/app.env
+    owner: admin
+    mode: '0640'
+
+- name: Run simple-api container
+  docker_container:
+    name: simple-api
+    image: mellou/tp-devops-simple-api:latest
+    state: started
+    restart_policy: always
+    env_file: /home/admin/app.env
+    networks:
+      - name: my-network

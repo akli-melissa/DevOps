@@ -1,0 +1,4 @@
+db_user: usr
+db_password: pwd
+app_db_host: database
+app_db_password: pwd

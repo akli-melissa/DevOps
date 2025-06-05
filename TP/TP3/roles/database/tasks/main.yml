@@ -1,0 +1,17 @@
+
+- name: Générer le fichier .env pour PostgreSQL
+  template:
+    src: .env.j2
+    dest: /home/admin/database.env
+    owner: admin
+    mode: '0640'
+
+- name: Run PostgreSQL container
+  docker_container:
+    name: database
+    image: mellou/tp-devops-database:latest
+    state: started
+    restart_policy: always
+    env_file: /home/admin/database.env
+    networks:
+      - name: my-network
