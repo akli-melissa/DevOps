@@ -1,0 +1,71 @@
+name: CI/CD DevOps 2025
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  # JOB 1 : Intégration continue - tests Java
+  test-backend:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build and test with Maven
+        run: mvn clean verify
+        working-directory: TP/TP2/tp-devops-correction-docker/simple-api
+
+      - name: SonarCloud Scan
+        run: |
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=akli-melissa_DevOps \
+            -Dsonar.organization=akli-melissa \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        working-directory: TP/TP2/tp-devops-correction-docker/simple-api
+
+  # JOB 2 : Livraison continue - build & push Docker images
+  build-and-push-docker-image:
+    needs: test-backend
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # ---------- IMAGE 1 : simple-api ----------
+      - name: Build image and push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: TP/TP2/tp-devops-correction-docker/simple-api
+          tags: ${{ secrets.DOCKER_USERNAME }}/tp-devops-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      # ---------- IMAGE 2 : http-server ----------
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v6
+        with:
+          context: TP/TP2/tp-devops-correction-docker/http-server
+          tags: ${{ secrets.DOCKER_USERNAME }}/tp-devops-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      # ---------- IMAGE 3 : database ----------
+      - name: Build image and push database
+        uses: docker/build-push-action@v6
+        with:
+          context: TP/TP2/tp-devops-correction-docker/database
+          tags: ${{ secrets.DOCKER_USERNAME }}/tp-devops-database:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
